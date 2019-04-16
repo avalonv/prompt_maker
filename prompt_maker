@@ -1,0 +1,124 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+from sys import argv, exit
+import re
+
+# r"text" is python's way of inserting escape
+# sequences as string literals
+colors = {
+        r"[black]":r"\[\e[0;30m\]",
+        r"[red]":r"\[\e[0;31m\]",
+        r"[green]":r"\[\e[0;32m\]",
+        r"[yellow]":r"\[\e[0;33m\]",
+        r"[blue]":r"\[\e[0;34m\]",
+        r"[purple]":r"\[\e[0;35m\]",
+        r"[cyan]":r"\[\e[0;36m\]",
+        r"[white]":r"\[\e[0;37m\]",
+        r"[bblack]":r"\[\e[1;30m\]",
+        r"[bred]":r"\[\e[1;31m\]",
+        r"[bgreen]":r"\[\e[1;32m\]",
+        r"[byellow]":r"\[\e[1;33m\]",
+        r"[bblue]":r"\[\e[1;34m\]",
+        r"[bpurple]":r"\[\e[1;35m\]",
+        r"[bcyan]":r"\[\e[1;36m\]",
+        r"[bwhite]":r"\[\e[1;37m\]",
+        r"[nocolor]":r"\[\e[m\]"
+        }
+
+special = {
+        r"[username]":r"\u",
+        r"[hostshort]":r"\h",
+        r"[hostfull]":r"\H",
+        r"[dirshort]":r"\W",
+        r"[dirfull]":r"\w",
+        r"[newline]":r"\n",
+        r"[date]":r"\d",
+        r"[time24]":r"\A",
+        r"[time12]":r"\@",
+        r"[tty]":r"\s",
+        r"[jobs]":r"\j",
+        r"[rbracket]":r"[",
+        r"[lbracket]":r"]" ,
+        r"[dollar]":r"\$"
+        }
+
+reset = r"\033[0" #;0m"
+
+def translate_blocks(blocks):
+
+    # double all'\', so they are escaped
+    blocks = blocks.replace('\\'*2,'\\')
+
+    for key, val in colors.items():
+        blocks = blocks.replace(key, val)
+
+    for key, val in special.items():
+        blocks = blocks.replace(key, val)
+
+    # important! this has to be the PS1 end, without it everything after the
+    # prompt's going to behave unpredicatbly, typed characters will not appear
+    blocks += r" \[\e[m\]"
+    return "\'{}\'".format(blocks)
+
+
+colors_list = "\n".join([" "*4 + key for key in colors.keys()])
+special_list = "\n".join([" "*4 + key for key in special.keys()])
+
+usage = 'usage: prompt_maker [-h] "<string>"'
+description = """{}\n
+<string> can be any combination of the predefined [colors] and [special] blocks
+enclosed in square brackets, along with any regular characters, including the
+more complex special characters that bash recognises but aren't listed below.\n
+[colors]:\n{}\n\n[special]:\n{}\n
+Example:
+prompt_maker "[red][username]@[hostshort]:[bgreen][dirfull][nocolor][dollar]"\
+""".format(usage,colors_list,special_list)
+
+# only run this if you are not importing this file
+if __name__ == "__main__":
+    # not enough arguments
+    if len(argv) != 2:
+        print(usage)
+        exit(1)
+
+    # argument is not string
+    if type(argv[1]) != str:
+        print(usage)
+        exit(2)
+
+    if argv[1] == '-h':
+        print(description)
+        exit(0)
+
+    argument = argv[1]
+
+    # block unit is a pattern that matches a [block]
+    block_unit = re.compile("\[.+?\]")
+    block_list = block_unit.findall(argument)
+    bad_blocks = [] # find invalid arguments passed
+    for block in block_list:
+        if not block in colors and block not in special:
+            bad_blocks.append(block)
+
+    length = len(bad_blocks)
+
+    if length > 0:
+        args = ''
+        if length > 1:
+            args = 's'
+
+        print("You have supplied {} invalid option{} in the argument:\x1b[31m\n    ".format(length, args) +
+            '\n    '.join(bad_blocks)+"\x1b[0m")
+        print(description)
+        exit(3)
+
+    ps1_string = "PS1="  + translate_blocks(argument)
+
+    print("""\
+
+\x1b[32m{}\x1b[0m
+
+Append to \x1b[32m~/.bashrc\x1b[0m in order to make permanent.
+You may need to run \x1b[32msource ~/.bashrc\x1b[0m if you do not intend to restart your terminal.
+""".format(ps1_string))
