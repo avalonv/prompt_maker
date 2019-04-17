@@ -69,7 +69,7 @@ usage = 'usage: prompt_maker [-h] "<string>"'
 description = """{}\n
 <string> can be any combination of the predefined [colors] and [special] blocks
 enclosed in square brackets, along with any regular characters, including the
-more complex special characters that bash recognises but aren't listed below.\n
+other special characters that bash recognises but aren't listed below.\n
 [colors]:\n{}\n\n[special]:\n{}\n
 Example:
 prompt_maker "[red][username]@[hostshort]:[bgreen][dirfull][nocolor][dollar]"\
