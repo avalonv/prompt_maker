@@ -4,9 +4,7 @@ Create bash PS1 prompt using template blocks
 ## Usage
 `usage: prompt_maker [-h] "<string>"`
 
-Where `<string>` can be any combination of the predefined `[colors]` and `[special]` blocks
-enclosed in square brackets, along with any regular characters, including the
-more complex special characters that bash recognises but aren't listed below.
+Where `<string>` can be any combination of the predefined `[colors]` and `[special]` blocks enclosed in square brackets, along with any regular characters, including the other special characters that bash recognises but aren't listed below.
 
 ### Templates:
 ```
@@ -29,6 +27,7 @@ colors:                 special:
 [bwhite]
 [nocolor]
 ```
+`[bcolors]` are bold colors. `[lbracket]` and `[rbracket]` can be used to insert literal `[` and `]` respectively.
 
 ### Example:
 `prompt_maker "[red][username]@[hostshort]:[bgreen][dirfull][nocolor][dollar]"`
