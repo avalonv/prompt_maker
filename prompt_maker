@@ -38,8 +38,8 @@ special = {
         r"[time12]":r"\@",
         r"[tty]":r"\s",
         r"[jobs]":r"\j",
-        r"[rbracket]":r"[",
-        r"[lbracket]":r"]" ,
+        r"[rbracket]":r"]",
+        r"[lbracket]":r"[" ,
         r"[dollar]":r"\$"
         }
 
