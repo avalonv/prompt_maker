@@ -1,10 +1,10 @@
 # prompt_maker
-Create bash PS1 prompt using template blocks
+Python script to generates bash PS1 prompts using template blocks
 
 ## Usage
-`usage: prompt_maker [-h] "<string>"`
+`prompt_maker [-h] "<string>"`
 
-Where `<string>` can be any combination of the predefined `[colors]` and `[special]` blocks enclosed in square brackets, along with any regular characters, including the other special characters that bash recognises but aren't listed below.
+Where `<string>` refers to any combination of the predefined `[colors]` and `[special]` blocks (enclosed in square brackets), along with any regular characters, including other special characters that bash recognises but aren't listed below.
 
 ### Templates:
 ```
@@ -35,3 +35,6 @@ colors:                 special:
 becomes
 
 `PS1='\[\e[0;31m\]\u@\h:\[\e[1;32m\]\w\[\e[m\]\$ \[\e[m\]'`
+
+![image](https://user-images.githubusercontent.com/29720696/187603729-5585f543-eeb3-4dda-99fe-0308b4e48ad0.png)
+
